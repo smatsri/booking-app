@@ -99,9 +99,22 @@ describe("NumberRange", () => {
     const res = NumberRange.reduce(ranges)
 
     expect(res.length).toEqual(1)
-    const first = res[0]
-    expect(first.from).toEqual(0)
-    expect(first.to).toEqual(3)
+    expect(res[0]).toEqual({from: 0, to: 3})
+  
+  })
+
+  test("should join to 2 and add third", () => {
+    const ranges: Range<number>[] = [
+      { from: 0, to: 1 },
+      { from: 1, to: 2 },
+      { from: 4, to: 5 }
+    ]
+
+    const res = NumberRange.reduce(ranges)
+
+    expect(res.length).toEqual(2)
+    expect(res[0]).toEqual({from: 0, to: 2})
+    expect(res[1]).toEqual({from: 4, to: 5})
   
   })
 })
