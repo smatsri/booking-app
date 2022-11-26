@@ -1,5 +1,5 @@
 import { assert, expect, test, describe } from 'vitest'
-import { Time, AppointmentDate, Vaction, WorkingDay, WorkingHourType, OnlyDate, AppointmentType, DayOfTheWeek, DefaultWorkingDay } from "./availability";
+import { Time, AppointmentDate, Vaction, WorkingDay, WorkingHourType, OnlyDate, AppointmentType, DayOfTheWeek, DefaultWorkingDay, CompareFn, Range, NumberRange } from "./availability";
 
 
 describe("Time.split", () => {
@@ -81,5 +81,27 @@ describe("AppointmentDate", () => {
     const appDate = AppointmentDate.fromWorkDay(working, now)
 
     expect(appDate.time.length).toEqual(4)
+  })
+})
+
+
+
+describe("NumberRange", () => {
+
+
+  test("should join to single range", () => {
+    const ranges: Range<number>[] = [
+      { from: 0, to: 1 },
+      { from: 1, to: 2 },
+      { from: 2, to: 3 }
+    ]
+
+    const res = NumberRange.reduce(ranges)
+
+    expect(res.length).toEqual(1)
+    const first = res[0]
+    expect(first.from).toEqual(0)
+    expect(first.to).toEqual(3)
+  
   })
 })

@@ -24,7 +24,32 @@ export type Range<T> = {
   to: T
 }
 
-type CompareFn<T> = (t1: T, t2: T) => number
+export namespace NumberRange {
+
+  export const join = (r1: Range<number>, r2: Range<number>): Range<number>[] => {
+    let [left, right] = r1.from < r2.from ? [r1, r2] : [r2, r1];
+
+    if (left.to >= right.from) {
+      const to = Math.max(left.to, right.to);
+      return [{ from: left.from, to }]
+    } else {
+      return [left, right]
+    }
+
+  }
+
+  export const reduce = (ranges: Range<number>[]) => {
+    const [head, ...rest] = ranges;
+    return rest.reduce((agg, r1) => {
+      const [r2] = agg.splice(-1)
+      const c = join(r1, r2)
+      return [...agg, ...c]
+    }, [head])
+  }
+
+}
+
+export type CompareFn<T> = (t1: T, t2: T) => number
 
 type BetweenFn<T> = (value: T, range: Partial<Range<T>>) => boolean
 
@@ -197,11 +222,10 @@ export namespace WorkDay {
 
   export const isWorking = (wh: WorkingDay, date: Date) => {
     const { dayOfWeek, timeRange, dateRange } = wh;
-    const d = Time.fromDate(date)
     return (
       dayOfWeek === DayOfTheWeek.fromDate(date)
       && (!dateRange || OnlyDate.between(OnlyDate.fromDate(date), dateRange))
-      && Time.gt(timeRange.from, Time.fromDate(date))
+      && Time.gt(timeRange.to, Time.fromDate(date))
     )
   }
 
@@ -250,9 +274,5 @@ export namespace AppointmentDate {
       date: OnlyDate.fromDate(date),
       time: getTime(wd, date),
     }
-  }
-
-  export const combain =  (w1: WorkDay, wd2: WorkDay, date: Date) => {
-
   }
 }
