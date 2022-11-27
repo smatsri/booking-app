@@ -24,6 +24,8 @@ export type Range<T> = {
   to: T
 }
 
+export const Range = <T>(from: T, to: T): Range<T> => ({ from, to })
+
 export namespace NumberRange {
 
   export const join = (r1: Range<number>, r2: Range<number>): Range<number>[] => {
@@ -38,11 +40,35 @@ export namespace NumberRange {
 
   }
 
-  export const reduce = (ranges: Range<number>[]) => {
+  /**
+   * subtruct from a range 
+   * @param range the range to be subtracted from (positive)
+   * @param sub the range to subtruct (negative)
+   * @returns array of ranges
+   */
+  export const subtract = (range: Range<number>, sub: Range<number>): Range<number>[] => {
+
+    if (range.from >= sub.to) {
+      return [range]
+    } else {
+      const arr: Range<number>[] = []
+      if (sub.from > range.from) {
+        arr.push({ from: range.from, to: sub.from })
+      }
+      if (sub.to < range.to) {
+        arr.push({ from: sub.to, to: range.to })
+      }
+      return arr
+    }
+  }
+
+
+
+  export const joinMany = (ranges: Range<number>[]) => {
     const [head, ...rest] = ranges;
-    return rest.reduce((agg, r1) => {
+    return rest.reduce((agg, range) => {
       const [r2] = agg.splice(-1)
-      const c = join(r1, r2)
+      const c = join(range, r2)
       return [...agg, ...c]
     }, [head])
   }

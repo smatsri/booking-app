@@ -1,5 +1,5 @@
 import { assert, expect, test, describe } from 'vitest'
-import { Time, AppointmentDate, Vaction, WorkingDay, WorkingHourType, OnlyDate, AppointmentType, DayOfTheWeek, DefaultWorkingDay, CompareFn, Range, NumberRange } from "./availability";
+import { Time, AppointmentDate, Vaction, WorkingDay, OnlyDate, AppointmentType, DayOfTheWeek, DefaultWorkingDay, CompareFn, Range, NumberRange } from "./availability";
 
 
 describe("Time.split", () => {
@@ -91,30 +91,67 @@ describe("NumberRange", () => {
 
   test("should join to single range", () => {
     const ranges: Range<number>[] = [
-      { from: 0, to: 1 },
-      { from: 1, to: 2 },
-      { from: 2, to: 3 }
+      Range(0, 1),
+      Range(1, 2),
+      Range(2, 3)
     ]
 
-    const res = NumberRange.reduce(ranges)
+    const res = NumberRange.joinMany(ranges)
 
-    expect(res.length).toEqual(1)
-    expect(res[0]).toEqual({from: 0, to: 3})
-  
+    expect(res).toEqual([Range(0, 3)])
   })
 
   test("should join to 2 and add third", () => {
     const ranges: Range<number>[] = [
-      { from: 0, to: 1 },
-      { from: 1, to: 2 },
-      { from: 4, to: 5 }
+      Range(0, 1),
+      Range(1, 2),
+      Range(4, 5)
     ]
 
-    const res = NumberRange.reduce(ranges)
+    const res = NumberRange.joinMany(ranges)
 
-    expect(res.length).toEqual(2)
-    expect(res[0]).toEqual({from: 0, to: 2})
-    expect(res[1]).toEqual({from: 4, to: 5})
-  
+    expect(res).toEqual([
+      Range(0, 2),
+      Range(4, 5)
+    ])
+
+  })
+
+  test("subtruct ", () => {
+    const range = Range(0, 10)
+    const subtruct = Range(-1, 5)
+
+    const res = NumberRange.subtract(range, subtruct)
+    expect(res).toEqual([Range(5, 10)])
+  })
+
+  test("subtruct 2", () => {
+    const range = Range(-1, 10)
+    const subtruct = Range(0, 5)
+
+    const res = NumberRange.subtract(range, subtruct)
+
+    expect(res).toEqual([
+      { from: -1, to: 0 },
+      { from: 5, to: 10 }
+    ])
+  })
+
+  test("subtruct 3", () => {
+    const range = Range(0, 10)
+    const subtruct = Range(0, 10)
+
+    const res = NumberRange.subtract(range, subtruct)
+    expect(res).toEqual([])
+    
+  })
+
+  test("subtruct 4", () => {
+    const range = Range(0, 10)
+    const subtruct = Range(-10, -1)
+
+    const res = NumberRange.subtract(range, subtruct)
+    expect(res).toEqual([range])
+    
   })
 })
