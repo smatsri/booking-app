@@ -1,6 +1,6 @@
 import { DayOfTheWeek } from "./DayOfTheWeek"
-import { OnlyDate } from "./OnlyDate"
-import { Time } from "./Time"
+import * as D from "./OnlyDate"
+import * as T from "./Time"
 import { Range } from "./Range"
 
 export enum AppointmentType {
@@ -20,8 +20,8 @@ export enum WorkingHourType {
 export type WorkingDay = {
   type: WorkingHourType.Work
   dayOfWeek: DayOfTheWeek
-  timeRange: Range<Time>
-  dateRange?: Partial<Range<OnlyDate>>
+  timeRange: Range<T.Time>
+  dateRange?: Partial<Range<D.OnlyDate>>
   appointmentType: AppointmentType
   clinicId?: string
   duration: number
@@ -32,15 +32,15 @@ export const DefaultWorkingDay: WorkingDay = {
   appointmentType: AppointmentType.Phone,
   dayOfWeek: DayOfTheWeek.Sunday,
   duration: 0,
-  timeRange: { from: Time.create(), to: Time.create() }
+  timeRange: { from: T.Time(), to: T.Time() }
 }
 
 export type Vaction = {
   type: WorkingHourType.Vacation
-  timeRange?: Range<Time>
-  dateRange: Range<OnlyDate>
+  timeRange?: Range<T.Time>
+  dateRange: Range<D.OnlyDate>
 }
-export const Vaction = (from: OnlyDate, to: OnlyDate, timeRange?: Range<Time>): Vaction => ({
+export const Vaction = (from: D.OnlyDate, to: D.OnlyDate, timeRange?: Range<T.Time>): Vaction => ({
   type: WorkingHourType.Vacation,
   dateRange: { from, to },
   timeRange
@@ -55,8 +55,8 @@ export namespace WorkDay {
     const { dayOfWeek, timeRange, dateRange } = wh;
     return (
       dayOfWeek === DayOfTheWeek.fromDate(date)
-      && (!dateRange || OnlyDate.between(OnlyDate.fromDate(date), dateRange))
-      && Time.gt(timeRange.to, Time.fromDate(date))
+      && (!dateRange || D.between(D.fromDate(date), dateRange))
+      && T.gt(timeRange.to, T.fromDate(date))
     )
   }
 

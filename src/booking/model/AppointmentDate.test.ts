@@ -27,8 +27,8 @@ describe("AppointmentDate", () => {
       dayOfWeek: now.getDay() + 1,
       duration: 30,
       timeRange: {
-        from: Time.create(8),
-        to: Time.create(10)
+        from: Time(8),
+        to: Time(10)
       }
     }
     const appDate = AppointmentDate.fromWorkDay(working, now)
@@ -44,8 +44,8 @@ describe("AppointmentDate", () => {
       dayOfWeek: now.getDay(),
       duration: 30,
       timeRange: {
-        from: Time.create(8),
-        to: Time.create(10)
+        from: Time(8),
+        to: Time(10)
       }
     }
 
@@ -64,8 +64,8 @@ describe("AppointmentDate", () => {
       dayOfWeek: now.getDay() + 1,
       duration: 30,
       timeRange: {
-        from: Time.create(8),
-        to: Time.create(10)
+        from: Time(8),
+        to: Time(10)
       }
     }
     const appDate = AppointmentDate.fromWorkDay(working, now)

@@ -1,8 +1,6 @@
 import { Range } from "./Range";
 
 
-export namespace NumberRange {
-
   export const add = (r1: Range<number>, r2: Range<number>): Range<number>[] => {
     let [left, right] = r1.from < r2.from ? [r1, r2] : [r2, r1];
 
@@ -48,4 +46,3 @@ export namespace NumberRange {
     }, [head]);
   };
 
-}

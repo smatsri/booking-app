@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'vitest'
 import { Range } from "./Range";
-import { NumberRange } from "./NumberRange";
+import { addMany, subtract } from "./NumberRange";
 
 describe("NumberRange", () => {
 
@@ -11,7 +11,7 @@ describe("NumberRange", () => {
       Range(2, 3)
     ]
 
-    const res = NumberRange.addMany(ranges)
+    const res = addMany(ranges)
 
     expect(res).toEqual([Range(0, 3)])
   })
@@ -23,7 +23,7 @@ describe("NumberRange", () => {
       Range(4, 5)
     ]
 
-    const res = NumberRange.addMany(ranges)
+    const res = addMany(ranges)
 
     expect(res).toEqual([
       Range(0, 2),
@@ -36,7 +36,7 @@ describe("NumberRange", () => {
     const range = Range(0, 10)
     const subtruct = Range(-1, 5)
 
-    const res = NumberRange.subtract(range, subtruct)
+    const res = subtract(range, subtruct)
     expect(res).toEqual([Range(5, 10)])
   })
 
@@ -44,7 +44,7 @@ describe("NumberRange", () => {
     const range = Range(-1, 10)
     const subtruct = Range(0, 5)
 
-    const res = NumberRange.subtract(range, subtruct)
+    const res = subtract(range, subtruct)
 
     expect(res).toEqual([
       { from: -1, to: 0 },
@@ -56,17 +56,17 @@ describe("NumberRange", () => {
     const range = Range(0, 10)
     const subtruct = Range(0, 10)
 
-    const res = NumberRange.subtract(range, subtruct)
+    const res = subtract(range, subtruct)
     expect(res).toEqual([])
-    
+
   })
 
   test("subtruct 4", () => {
     const range = Range(0, 10)
     const subtruct = Range(-10, -1)
 
-    const res = NumberRange.subtract(range, subtruct)
+    const res = subtract(range, subtruct)
     expect(res).toEqual([range])
-    
+
   })
 })

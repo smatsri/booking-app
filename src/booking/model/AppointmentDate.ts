@@ -1,5 +1,5 @@
 import * as D from "./OnlyDate";
-import { Time } from "./Time";
+import { Time, split } from "./Time";
 import { AppointmentType, WorkDay, WorkingDay } from "./WorkDay";
 
 
@@ -22,8 +22,7 @@ export namespace AppointmentDate {
       duration,
       appointmentType }: WorkingDay): AppointmentTime[] => {
 
-    return Time
-      .split(from, to, duration)
+    return split(from, to, duration)
       .map<AppointmentTime>((time) => ({
         duration,
         time,
